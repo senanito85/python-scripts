@@ -1,31 +1,39 @@
-  1 #!/usr/bin/python
-  2 
-  3 import mysql.connector
-  4 from mysql.connector import Error
-  5 
-  6 try:
-  7     connection = mysql.connector.connect(host='senanito85.mysql.pythonanywhere-services.com',
-  8                                          database='senanito85$cgl',
-  9                                          user='senanito85',
- 10                                          password='PutHereThePassword')
- 11 
- 12     sql_select_Query = "select * from laptop"                                                                                                                                       
- 13     cursor = connection.cursor()
- 14     cursor.execute(sql_select_Query)
- 15     records = cursor.fetchall()
- 16     print("Total number of rows in Laptop is: ", cursor.rowcount)
- 17 
- 18     print("\nPrinting each laptop record")
- 19     for row in records:
- 20         print("Id = ", row[0], )
- 21         print("Name = ", row[1])
- 22         print("Price  = ", row[2])
- 23         print("Purchase date  = ", row[3], "\n")
- 24 
- 25 except Error as e:
- 26     print("Error reading data from MySQL table", e)
- 27 finally:
- 28     if (connection.is_connected()):
- 29         connection.close()
- 30         cursor.close()
- 31         print("MySQL connection is closed")
+#!/usr/bin/python
+
+import mysql.connector
+from mysql.connector import Error
+#Getting user Input
+username = input("tell me the username: ")
+password = input("tell me the password: ")
+#Creating DB connection
+try:
+    connection = mysql.connector.connect(host='senanito85.mysql.pythonanywhere-services.com',
+                                         database='senanito85$cgl',
+                                         user='senanito85',
+                                         password='<PutPasswordHere>')
+    sql_select_Query = "select username, password from User"
+    cursor = connection.cursor()
+    cursor.execute(sql_select_Query)
+    records = cursor.fetchall()
+    print("Total number of rows in Laptop is: ", cursor.rowcount)
+    print("\nCheking username record")
+    for row in records:
+        dbuserentry = row[0]
+        dbpasswordy = row[1]
+        if username == dbuserentry:
+            if password == dbpasswordy:
+                print("Access Granted")
+                print("Welcome",username)
+            else:
+                print ("Sorry Username or Password is incorrect")
+            #print ("username True: ", username)
+        else:
+            print ("*")
+        #print(dbuserentry)
+except Error as e:
+    print("Error reading data from MySQL table", e)
+finally:
+    if (connection.is_connected()):
+        connection.close()
+        cursor.close()
+        print("MySQL connection is closed")
